@@ -16,6 +16,8 @@ class Article(models.Model):
 
     updated= models.DateTimeField(auto_now=True)
 
+    delete = models.BooleanField(default=False)
+
     class Meta:
         ordering = ('-created',)
 

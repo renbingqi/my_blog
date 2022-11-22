@@ -16,5 +16,7 @@ Including another URLconf
 from django.urls import path
 from article import views
 urlpatterns = [
-    path('',views.article_list,name='article_list')
+    path('',views.article_list,name='article_list'),
+    path('create',views.article_create,name='article_create'),
+    path('delete/<int:id>/',views.article_delete,name='article_delete')
 ]
