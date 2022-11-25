@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
+
+from classifications.models import Classifications
 # Create your models here.
 
 # 博客文章数据模型
@@ -12,11 +13,15 @@ class Article(models.Model):
 
     body=models.TextField()
 
-    created=models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(auto_now=True)
 
     updated= models.DateTimeField(auto_now=True)
 
-    delete = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
+    hot=models.IntegerField(default=0)
+
+    classifications = models.ForeignKey(Classifications,on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('-created',)

@@ -37,7 +37,7 @@ def article_delete(request,id):
         #根据删除的id得到文章对象
         article_obj = Article.objects.get(id=id)
         #将该文章的delete状态置为True
-        article_obj.delete=True
+        article_obj.deleted=True
         article_obj.save()
         return HttpResponse("文章删除成功。")
 
