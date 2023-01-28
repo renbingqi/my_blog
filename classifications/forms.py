@@ -5,7 +5,7 @@
 
 from django import forms
 from .models import Classifications
-#写文章的表单类
+#专栏的表单类
 class ClassificationForm(forms.ModelForm):
     class Meta:
         #指明数据来源

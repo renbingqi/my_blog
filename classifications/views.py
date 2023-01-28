@@ -2,14 +2,18 @@ from django.shortcuts import render,HttpResponse
 from classifications.models import Classifications
 from .forms import ClassificationForm
 from article.models import Article
+import json
 # Create your views here.
 
 def classification_list(request):
+    classification_list=[]
     #取出所有的专栏
     classifications=Classifications.objects.all()
     for classification_obj in classifications:
-        print(classification_obj.title)
-    return HttpResponse("Hello World")
+        id = classification_obj.id
+        title= classification_obj.title
+        classification_list.append({"id":id,"title":title})
+    return HttpResponse(json.dumps({"code":200 ,"data":classification_list}))
 
 
 def classification_create(request):
