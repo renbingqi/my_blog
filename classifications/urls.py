@@ -18,6 +18,7 @@ from classifications import views
 urlpatterns = [
     path('',views.classification_list,name='classification_list'),
     path('create',views.classification_create,name='classification_create'),
-    path('delete/<int:id>/',views.classification_delete,name='classification_delete'),
-    path('update/<int:id>/',views.classification_update,name='classification_update')
+    path('delete/<int:id>',views.classification_delete,name='classification_delete'),
+    path('update/<int:id>',views.classification_update,name='classification_update'),
+    path('classification_articles/<int:id>',views.classification_articles,name='classification_articles')
 ]

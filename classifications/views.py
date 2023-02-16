@@ -1,3 +1,4 @@
+from django.core.serializers import serialize
 from django.shortcuts import render,HttpResponse
 from classifications.models import Classifications
 from .forms import ClassificationForm
@@ -14,6 +15,7 @@ def classification_list(request):
         title= classification_obj.title
         classification_list.append({"id":id,"title":title})
     return HttpResponse(json.dumps({"code":200 ,"data":classification_list}))
+    # return HttpResponse("OK")
 
 
 def classification_create(request):
@@ -27,7 +29,7 @@ def classification_create(request):
             new_classification=classification_form.save(commit=False)
             #将文章保存到数据库中
             new_classification.save()
-            return HttpResponse("专栏创建成功。")
+            return HttpResponse(json.dumps({"code":200,"message":"OK"}))
         else:
             #如果数据不合法，则返回错误信息
             return HttpResponse("表单内容有误，请重新填写。")
@@ -59,3 +61,18 @@ def classification_update(request,id):
             return HttpResponse("专栏更新成功。")
         else:
             return HttpResponse("专栏更新失败，内容错误。")
+
+
+def classification_articles(request,id):
+    """
+    根据类别返回对应的文章
+    """
+    article_list=[]
+    classification=Classifications.objects.get(id=id)
+    articles_obj=classification.article_set.all()
+    articles_str = serialize('json', articles_obj)
+    articles_list = json.loads(articles_str)
+    for item in articles_list:
+        article_list.append(item)
+
+    return HttpResponse(json.dumps({"code":200 , "data":article_list}))

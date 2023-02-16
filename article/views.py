@@ -7,8 +7,9 @@ import json
 from .forms import ArticleForm
 # Create your views here.
 import json
+from pathlib import Path
 
-
+BASE_DIR = Path(__file__).resolve().parent.parent
 def article_list(request):
     article_list = []
     # 取出所有的文章
@@ -35,7 +36,7 @@ def article_list(request):
         article_obj['created'] = created
         article_obj['hot'] = hot
         article_list.append(article_obj)
-    return HttpResponse(json.dumps({"code": 200, "data": article_list}))
+    return HttpResponse(json.dumps({"code": 200, "data": sorted(article_list, key=lambda x: x['id'])}))
 
 
 def article_create(request):
@@ -83,9 +84,28 @@ def article_update(request, id):
         else:
             return HttpResponse("文章更新失败，内容错误")
 
-def updatehot(request,id):
+
+def updatehot(request, id):
     if request.method == "GET":
         article_obj = Article.objects.get(id=id)
-        article_obj.hot+=1
+        article_obj.hot += 1
         article_obj.save()
-        return HttpResponse(json.dumps({"code":200,"message":"OK"}))
+        return HttpResponse(json.dumps({"code": 200, "message": "OK"}))
+
+def upload_picture(request):
+    img = request.FILES.get("img")
+    img_name=img.name
+    # 文件保存路径
+    path=f"{BASE_DIR}/static/{img_name}"
+    return_path=f"http://127.0.0.1:8000/articles/get_file?picture={img_name}"
+    with open(path,'ab') as fp:
+        for chunk in img.chunks():
+            fp.write(chunk)
+    return HttpResponse(json.dumps({"code":200,"data":return_path}))
+
+def get_file(request):
+    file_name=request.GET.get('picture')
+    path = f'{BASE_DIR}/static/{file_name}'
+    file = open(path,'rb')
+    return HttpResponse(file.read(), content_type='image/jpg')
+
