@@ -13,15 +13,17 @@ class Article(models.Model):
 
     body=models.TextField()
 
-    created = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now=False)
 
-    updated= models.DateTimeField(auto_now=True)
+    updated= models.DateTimeField(auto_now=False)
 
     deleted = models.BooleanField(default=False)
 
     hot=models.IntegerField(default=0)
 
     classifications = models.ForeignKey(Classifications,on_delete=models.CASCADE)
+
+    temp = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-created',)
